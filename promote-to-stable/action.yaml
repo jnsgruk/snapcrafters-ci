@@ -41,6 +41,19 @@ runs:
         allow-edits: "false"
         permission-level: write
 
+    - name: Ensure promoter is in Snapcrafters
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const result = await github.rest.teams.getMembershipForUserInOrg({
+            org: 'snapcrafters',
+            team_slug: 'reviewers',
+            username: context.actor
+          })
+
+          console.log(creator, result)
+          core.setFailed('commenting user is not permitted to promote this snap.')
+
     - name: Get valid revisions for promotion
       id: valid-revisions
       uses: actions/github-script@v7
